@@ -1,0 +1,3 @@
+[submodule "preprocess/sphtud"]
+	path = zig/sphtud
+	url = ../sphtud
