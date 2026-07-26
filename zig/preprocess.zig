@@ -67,7 +67,8 @@ const HeadingCache = struct {
     pub fn format(self: HeadingCache, w: *std.Io.Writer) !void {
         for (self.cache.items) |item| {
             if (item.len > 0) {
-                try w.print("{s}\n", .{item});
+                try writeAsciiOnly(w, item);
+                try w.writeByte('\n');
             }
         }
     }
@@ -89,6 +90,17 @@ fn removeTemplates(buf: []u8, data: []const u8) ![]const u8 {
     return w.buffered();
 }
 
+fn writeAsciiOnly(w: *std.Io.Writer, data: []const u8) !void {
+    var start: usize = 0;
+    for (data, 0..) |c, i| {
+        if (c > 127) {
+            if (i > start) try w.writeAll(data[start..i]);
+            start = i + 1;
+        }
+    }
+    if (start < data.len) try w.writeAll(data[start..]);
+}
+
 fn writeParagraph(heading_cache: *HeadingCache, outdir: c_int, p: []const u8, file_name: []const u8, segment_idx: usize) !void {
     const p_trimmed = std.mem.trim(u8, p, &std.ascii.whitespace);
     if (p_trimmed.len == 0) return;
@@ -103,9 +115,11 @@ fn writeParagraph(heading_cache: *HeadingCache, outdir: c_int, p: []const u8, fi
     var writer_buf: [4096]u8 = undefined;
     var outw = sphtud.io.Writer.init(outf, &writer_buf);
 
-    try outw.interface.print("= {s} =\n", .{file_name});
+    try outw.interface.writeAll("= ");
+    try writeAsciiOnly(&outw.interface, file_name);
+    try outw.interface.writeAll(" =\n");
     try heading_cache.format(&outw.interface);
-    try outw.interface.writeAll(p_trimmed);
+    try writeAsciiOnly(&outw.interface, p_trimmed);
     try outw.interface.flush();
 }
 
