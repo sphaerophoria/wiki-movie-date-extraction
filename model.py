@@ -6,6 +6,7 @@ DEFAULT_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 KNOWN_MODELS = [
     "distilbert-base-uncased-finetuned-sst-2-english",
     "google-bert/bert-base-uncased",
+    "google-bert/mobilebert-uncased",
     "answerdotai/ModernBERT-base",
     "sentence-transformers/all-MiniLM-L6-v2",
 ]

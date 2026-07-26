@@ -1,0 +1,12 @@
+.{
+    .name = .home_release_resolver,
+    .version = "0.0.1",
+    .paths = .{
+        "src",
+        "build.zig",
+        "build.zig.zon",
+        "sphasset",
+        "sphtud",
+    },
+    .fingerprint = 0x73fcbeaaa92df39f,
+}

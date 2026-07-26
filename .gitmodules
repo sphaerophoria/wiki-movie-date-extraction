@@ -1,3 +1,6 @@
 [submodule "preprocess/sphtud"]
 	path = zig/sphtud
 	url = ../sphtud
+[submodule "sphasset"]
+	path = sphasset
+	url = ../sphasset/
